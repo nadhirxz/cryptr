@@ -30,6 +30,10 @@ func main() {
 		return
 	}
 
+	if !*encrypt && !*decrypt {
+		*encrypt = true
+	}
+
 	if *encrypt == *decrypt {
 		fmt.Println("Please choose either encrypt or decrypt")
 		return
