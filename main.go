@@ -15,6 +15,7 @@ func main() {
 	password := parser.String("p", "password", &argparse.Options{Required: true, Help: "Password to encrypt/decrypt file"})
 	encrypt := parser.Flag("e", "encrypt", &argparse.Options{Required: false, Help: "Encrypt file"})
 	decrypt := parser.Flag("d", "decrypt", &argparse.Options{Required: false, Help: "Decrypt file"})
+	output := parser.String("o", "output", &argparse.Options{Required: false, Help: "Output file"})
 
 	err := parser.Parse(os.Args)
 	if err != nil {
@@ -30,7 +31,7 @@ func main() {
 	key := utils.GenerateKey(*password)
 
 	if *encrypt {
-		err := utils.EncryptFile(*filename, key)
+		err := utils.EncryptFile(*filename, key, *output)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -40,7 +41,7 @@ func main() {
 	}
 
 	if *decrypt {
-		err := utils.DecryptFile(*filename, key)
+		err := utils.DecryptFile(*filename, key, *output)
 		if err != nil {
 			fmt.Println(err)
 			return

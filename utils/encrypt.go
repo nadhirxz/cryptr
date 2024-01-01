@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func EncryptFile(filename string, key []byte) error {
+func EncryptFile(filename string, key []byte, outputFilename string) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("could not read file: %v", err)
@@ -30,7 +30,12 @@ func EncryptFile(filename string, key []byte) error {
 	stream := cipher.NewCFBEncrypter(block, iv)
 	stream.XORKeyStream(cipherBytes[aes.BlockSize:], file)
 
-	err = os.WriteFile(filename+".enc", cipherBytes, 0644)
+	output := outputFilename
+	if outputFilename == "" {
+		output = filename + ".enc"
+	}
+
+	err = os.WriteFile(output, cipherBytes, 0644)
 	if err != nil {
 		return fmt.Errorf("could not write encrypted file: %v", err)
 	}
@@ -38,7 +43,7 @@ func EncryptFile(filename string, key []byte) error {
 	return nil
 }
 
-func DecryptFile(filename string, key []byte) error {
+func DecryptFile(filename string, key []byte, outputFilename string) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("could not read file: %v", err)
@@ -59,7 +64,12 @@ func DecryptFile(filename string, key []byte) error {
 	stream := cipher.NewCFBDecrypter(block, iv)
 	stream.XORKeyStream(file, file)
 
-	err = os.WriteFile("dec."+(filename)[:len(filename)-4], file, 0644)
+	output := outputFilename
+	if outputFilename == "" {
+		output = "dec." + (filename)[:len(filename)-4]
+	}
+
+	err = os.WriteFile(output, file, 0644)
 	if err != nil {
 		return fmt.Errorf("could not write encrypted file: %v", err)
 	}
