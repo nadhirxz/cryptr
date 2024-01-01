@@ -12,7 +12,7 @@ import (
 func EncryptFile(filename string, key []byte) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Print(err)
+		return fmt.Errorf("could not read file: %v", err)
 	}
 
 	block, err := aes.NewCipher(key)
@@ -41,7 +41,7 @@ func EncryptFile(filename string, key []byte) error {
 func DecryptFile(filename string, key []byte) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Print(err)
+		return fmt.Errorf("could not read file: %v", err)
 	}
 
 	block, err := aes.NewCipher(key)
