@@ -25,6 +25,11 @@ func main() {
 		return
 	}
 
+	if *filename == "" {
+		fmt.Println("Please specify file to encrypt/decrypt")
+		return
+	}
+
 	if *encrypt == *decrypt {
 		fmt.Println("Please choose either encrypt or decrypt")
 		return
